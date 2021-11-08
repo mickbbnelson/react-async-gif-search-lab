@@ -12,6 +12,7 @@ export default class GifSearch extends React.Component {
                     <label>Search a Gif:</label>
                     <input type="text" name="gif" value={this.state.search}></input>
                 </form>
+                
             </div>)
             
     }
