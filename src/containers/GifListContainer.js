@@ -5,11 +5,12 @@ import GifSearch from '../components/GifSearch'
 export default class GifListContainer extends React.Component {
 
     state = {
-        gifs: []
+        gifs: [],
+        searchTerm: "dolphin"
     }
     
     componentDidMount() {
-        fetch('https://api.giphy.com/v1/gifs/search?q=dolphin&api_key=nZcf0rQNHPr1h4BTJGxCBaZFEQvILUZD&rating=g/?_limit=3') 
+        fetch(`https://api.giphy.com/v1/gifs/search?q=${this.state.searchTerm}&api_key=nZcf0rQNHPr1h4BTJGxCBaZFEQvILUZD&rating=g/?_limit=3`) 
         .then(r => r.json())
         .then(data => {
             this.setState({
@@ -19,14 +20,39 @@ export default class GifListContainer extends React.Component {
         )
     }
 
-    //handleSubmit = () => {
-    //
+    changeSearch = (term) => {
+       console.log(this) 
+       this.setState({
+           searchTerm: term
+       })
+    }
+
+    componentDidUpdate() {
+        fetch(`https://api.giphy.com/v1/gifs/search?q=${this.state.searchTerm}&api_key=nZcf0rQNHPr1h4BTJGxCBaZFEQvILUZD&rating=g/?_limit=3`) 
+        .then(r => r.json())
+        .then(data => {
+            this.setState({
+                gifs: data.data
+            })
+        }
+        )
+    }
+
+    //componentDidUpdate(term) {
+    //    fetch(`https://api.giphy.com/v1/gifs/search?q=${term}&api_key=nZcf0rQNHPr1h4BTJGxCBaZFEQvILUZD&rating=g/?_limit=3`) 
+    //    .then(r => r.json())
+    //    .then(data => {
+    //        this.setState({
+    //            gifs: data.data
+    //        })
+    //    }
+    //    )
     //}
     
     render() {
         return <div>
-            <h2><GifSearch /></h2>
-            <p><GifList gifs={this.state.gifs} /></p>
+            <h2><GifSearch searchSubmit={this.changeSearch}/></h2>
+            <div><GifList gifs={this.state.gifs} /></div>
             </div> 
     }
 }
